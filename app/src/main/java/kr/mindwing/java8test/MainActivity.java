@@ -30,8 +30,9 @@ import android.widget.TextView;
         }
     ...
         compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
     }
  */
 public class MainActivity extends AppCompatActivity {
