@@ -48,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
         btButton = (Button) findViewById(R.id.button);
 
         // 하나씩 comment-out 하고, 해당 클래스의 주석대로 설정을 해주면 테스트가능함.
-//        callMe = new LambdaTest();
+        callMe = new LambdaTest();
 //        callMe = new MethodReferenceTest();
 //        callMe = new DefaultMethodTest();
-        callMe = new FunctionPackageTest();
+//        callMe = new FunctionPackageTest();
 
         callMe.run();
     }
@@ -115,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
         minSdkVersion 'N' // compileSdk 가 'android-N' 이면 minSdk 는 'N' 으로 고정됨.
         targetSdkVersion 'N' // minSdk 보다 더 작은 값일 수 없으므로 자동으로 'N' 이 됨.
      */
-    class FunctionPackageTest implements Runnable {
-        @Override
-        public void run() {
-            java.util.function.Consumer<View> cons = v -> tvLabel.setText(((Button) v).getText());
-
-            btButton.setOnClickListener(v -> tvLabel.setText(cons.getClass().getName()));
-        }
-    }
+//    class FunctionPackageTest implements Runnable {
+//        @Override
+//        public void run() {
+//            java.util.function.Consumer<View> cons = v -> tvLabel.setText(((Button) v).getText());
+//
+//            btButton.setOnClickListener(v -> tvLabel.setText(cons.getClass().getName()));
+//        }
+//    }
 }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Java8Test.iml" filepath="$PROJECT_DIR$/Java8Test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java8_for_Android.iml" filepath="$PROJECT_DIR$/Java8_for_Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
