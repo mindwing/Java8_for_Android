@@ -6,39 +6,49 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 /**
-    Java 8 기능을 Android Studio 2.0 & 2.1 에서 쓰기 위해 필요한 설정을 확인해보는 프로젝트입니다.
+    Java 8 기능을 Android Studio 2.2 에서 쓰기 위해 필요한 설정을 확인해보는 프로젝트입니다.
     callMe 변수에 테스트할 인스턴스를 하나씩 대입해서 실행하면 됩니다.
 
     2016-04-11 by mindwing
+    2016-06-29 by mindwing
 
 
-    1. project 레벨의 build.gradle 파일에 android gradle 버전을 2.1.0 으로 명시해야 함.
+    1. project 레벨의 build.gradle 파일에 android gradle 버전을 2.2.0 으로 명시해야 함.
+       (현재 Android Studio 2.2 의 버전은 2.2 preview 4 이고, 여기에 해당하는 gradle plugin 의
+        버전은 2.2.0-alpha4 임.
+        버전이 올라갈수록 2.2.0-alpha4 의 명칭도 변경됨)
 
-        classpath 'com.android.tools.build:gradle:2.1.0-alpha5'
+        classpath 'com.android.tools.build:gradle:2.2.0-alpha4'
 
 
-    2. app 레벨의 build.gradle 파일에 jackOptions 설정을 켜야 함.
+    2. app 레벨의 build.gradle 파일에 설정을 맞춰줌.
 
     android {
+        compileSdkVersion 24        // SDK 24 버전 사용
+        buildToolsVersion '24.0.0'  // build-tool 24 버전 사용
+
         defaultConfig {
             applicationId "kr.mindwing.java8test"
+            minSdkVersion 24    // lambda 식, method reference 만 쓴다면 9 이상이어도 OK
+            targetSdkVersion 24 // lambda 식, method reference 만 쓴다면 9 이상이어도 OK
             ...
             jackOptions {
-                enabled true // Jack & Jill 활성화
+                enabled true        // Jack & Jill 툴체인 활성화
             }
         }
     ...
-        compileOptions {
+        compileOptions {            // 소스코드 레벨을 Java 8 으로 설정
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
         }
     }
  */
 public class MainActivity extends AppCompatActivity {
-    TextView tvLabel;
-    Button btButton;
-    Runnable callMe;
+    private TextView tvLabel;
+    private Button btButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,40 +58,40 @@ public class MainActivity extends AppCompatActivity {
         tvLabel = (TextView) findViewById(R.id.label);
         btButton = (Button) findViewById(R.id.button);
 
-        // 하나씩 comment-out 하고, 해당 클래스의 주석대로 설정을 해주면 테스트가능함.
-        callMe = new LambdaTest();
-//        callMe = new MethodReferenceTest();
-//        callMe = new DefaultMethodTest();
-//        callMe = new FunctionPackageTest();
+        /*
+            [app 레벨 build.gradle 설정할 내용]
+
+            minSdkVersion 9     // 최소 9 이상이면 OK
+            targetSdkVersion 9  // 최소 9 이상이면 OK
+         */
+//        Runnable callMe = new LambdaTest();
+//        Runnable callMe = new MethodReferenceTest();
+
+
+        /*
+            각 클래스들도 주석처리되어 있으므로 테스트하려면 Runnable 생성에 맞는 클래스의 주석도 풀어야 함.
+
+            [app 레벨 build.gradle 설정할 내용]
+
+            minSdkVersion 24    // 최소 24 이상이어야 OK
+            targetSdkVersion 24 // 최소 24 이상이어야 OK
+         */
+//        Runnable callMe = new InterfaceStaticMethodTest();
+//        Runnable callMe = new DefaultMethodTest();
+        Runnable callMe = new FunctionStreamPackageTest();
 
         callMe.run();
     }
 
-    /*
-        [app 레벨 build.gradle 설정내용]
-
-        compileSdkVersion 23
-        buildToolsVersion '24.0.0 rc2' // Jack & Jill
-        minSdkVersion 9
-        targetSdkVersion 9
-     */
-    class LambdaTest implements Runnable {
+    private class LambdaTest implements Runnable {
         @Override
         public void run() {
             btButton.setText("testLambda()");
-            btButton.setOnClickListener(v -> tvLabel.setText(((Button) v).getText()));
+            btButton.setOnClickListener(v -> tvLabel.setText("OK!!! \n" + ((Button) v).getText()));
         }
     }
 
-    /*
-        [app 레벨 build.gradle 설정내용]
-
-        compileSdkVersion 23
-        buildToolsVersion '24.0.0 rc2' // Jack & Jill
-        minSdkVersion 9
-        targetSdkVersion 9
-     */
-    class MethodReferenceTest implements Runnable {
+    private class MethodReferenceTest implements Runnable {
         @Override
         public void run() {
             btButton.setText("testMethodReference()");
@@ -89,39 +99,32 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private void setTvLabel(View v) {
-            tvLabel.setText(((Button) v).getText());
+            tvLabel.setText("OK!!! \n" + ((Button) v).getText());
         }
     }
 
-    /*
-        [app 레벨 build.gradle 설정내용]
-
-        compileSdkVersion 23
-        buildToolsVersion '24.0.0 rc2' // Jack & Jill
-        minSdkVersion 21
-        targetSdkVersion 21
-     */
-    class DefaultMethodTest implements Runnable {
+    private class InterfaceStaticMethodTest implements Runnable {
         @Override
         public void run() {
-            btButton.setOnClickListener(v -> tvLabel.setText(DefaultMethodInterface.getName()));
+            btButton.setOnClickListener(v -> tvLabel.setText(DefaultMethodInterface.getStaticName()));
         }
     }
 
-    /*
-        [app 레벨 build.gradle 설정내용]
+    private class DefaultMethodTest implements Runnable, DefaultMethodInterface {
+        @Override
+        public void run() {
+            btButton.setOnClickListener(v -> tvLabel.setText(this.getDefaultName()));
+        }
+    }
 
-        compileSdkVersion 'android-N' // N 테스트버전을 설치한 Nexus 5X 에서 테스트해봄.
-        buildToolsVersion '24.0.0 rc2' // Jack & Jill
-        minSdkVersion 'N' // compileSdk 가 'android-N' 이면 minSdk 는 'N' 으로 고정됨.
-        targetSdkVersion 'N' // minSdk 보다 더 작은 값일 수 없으므로 자동으로 'N' 이 됨.
-     */
-//    class FunctionPackageTest implements Runnable {
-//        @Override
-//        public void run() {
-//            java.util.function.Consumer<View> cons = v -> tvLabel.setText(((Button) v).getText());
-//
-//            btButton.setOnClickListener(v -> tvLabel.setText(cons.getClass().getName()));
-//        }
-//    }
+    private class FunctionStreamPackageTest implements Runnable {
+        @Override
+        public void run() {
+            btButton.setOnClickListener(v ->
+                    Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                            .stream()
+                            .reduce((x, y) -> x + y)
+                            .ifPresent(z -> tvLabel.setText("sum(1...10) = " + z)));
+        }
+    }
 }

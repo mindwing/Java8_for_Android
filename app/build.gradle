@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-//    compileSdkVersion 'android-N'
-    buildToolsVersion "24.0.0 rc2"
+    compileSdkVersion 24
+    buildToolsVersion '24.0.0'
 
     defaultConfig {
         applicationId "kr.mindwing.java8test"
-        minSdkVersion 9
-//        minSdkVersion 'N'
-        targetSdkVersion 9
-//        targetSdkVersion 'N'
+//        minSdkVersion 9   // lambda 식과 method reference 만 쓴다면 최소 9 도 사용가능
+//        targetSdkVersion 9
+        minSdkVersion 24   // Inteface 의 default/static 메서드와 function, stream 패키지를 쓸 때 24 로 설정
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
 
@@ -33,5 +32,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha3'
 }
