@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             btButton.setOnClickListener(v ->
-                    IntStream.range(1, 11)
+                    IntStream.rangeClosed(1, 10)
                             .reduce((x, y) -> x + y)
                             .ifPresent(z -> tvLabel.setText("sum(1...10) = " + z)));
         }
