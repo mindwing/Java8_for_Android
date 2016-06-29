@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Arrays;
+import java.util.stream.IntStream;
 
 /**
     Java 8 기능을 Android Studio 2.2 에서 쓰기 위해 필요한 설정을 확인해보는 프로젝트입니다.
@@ -121,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             btButton.setOnClickListener(v ->
-                    Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                            .stream()
+                    IntStream.range(1, 11)
                             .reduce((x, y) -> x + y)
                             .ifPresent(z -> tvLabel.setText("sum(1...10) = " + z)));
         }
